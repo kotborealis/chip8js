@@ -14,18 +14,37 @@
     <script src="src/utils.js"></script>
     <script src="src/chip8.js"></script>
     <script src="src/chip8_keyboard.js"></script>
+    <script src="dat.gui.min.js"></script>
 </head>
 <body>
 
 </body>
 <script>
     "use strict";
-    const canvasManager = new CanvasManager("canvas",{fullscreen:true,width:640,height:320});
+    const canvasManager = new CanvasManager("canvas",{width:640,height:320});
     const pixelRender = new PixelRender(canvasManager,{width:64,height:32});
     const cpu = new Chip8();
     const keyboard = new Chip8_keyboard(canvasManager);
     cpu.screen = pixelRender;
     cpu.keyboard = keyboard;
-    loadBinaryData("./roms/BRIX",(buffer)=>cpu.init(buffer));
+
+    const init={};
+    init.init = ()=>{
+        console.log("start");
+
+    };
+    init.rom="IBM";
+    init.start = ()=>{
+        loadBinaryData("./roms/"+init.rom,(buffer)=>{
+            cpu.init(buffer);
+            cpu.next();
+        });
+    }
+    init.reset = ()=>cpu.reset();
+
+    const gui = new dat.GUI();
+    gui.add(init,"rom",["BADFOOD","15PUZZLE","BLINKY","BLITZ","BRIX","CONNECT4","GUESS","HIDDEN","INVADERS","KALEID","MAZE","MERLIN","MISSILE","PONG","PONG2","PUZZLE","SYZYGY","TANK","TETRIS","TICTAC","UFO","VBRIX","VERS","WIPEOFF"]);
+    gui.add(init,"start");
+    gui.add(init,"reset");
 </script>
 </html>
