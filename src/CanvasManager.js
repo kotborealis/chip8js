@@ -29,6 +29,10 @@ function CanvasManager(canvas,options={}){
             this.e_canvas.width = window.innerWidth;
             this.e_canvas.height = window.innerHeight;
         }
+        else{
+            this.e_canvas.width=options.width;
+            this.e_canvas.height=options.height;
+        }
         this.clear();
         this.onresize();
     };
@@ -145,4 +149,9 @@ function CanvasManager(canvas,options={}){
         const y = _y-this.e_canvas.getBoundingClientRect().top;
         return {x,y};
     };
+    
+    Object.defineProperty(this,"fullscreen",{
+        get: ()=>options.fullscreen,
+        set: (v)=>{options.fullscreen=v;window.onresize();}
+    });
 }

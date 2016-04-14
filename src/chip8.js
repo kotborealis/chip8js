@@ -373,8 +373,6 @@ function Chip8(){
         loadRom(rom);
     };
 
-    this.togglePause = ()=>this.pause=!this.pause;
-
     this.start = next;
 }
 
