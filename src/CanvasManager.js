@@ -18,6 +18,7 @@ function CanvasManager(canvas,options={}){
     }
     else
         this.e_canvas=canvas;
+
     this.e_canvas.width=options.width;
     this.e_canvas.height=options.height;
     this.ctx = this.e_canvas.getContext("2d");
@@ -27,9 +28,9 @@ function CanvasManager(canvas,options={}){
         if(options.fullscreen) {
             this.e_canvas.width = window.innerWidth;
             this.e_canvas.height = window.innerHeight;
-            this.clear();
-            this.onresize();
         }
+        this.clear();
+        this.onresize();
     };
     this.onresize = ()=>{};
     setTimeout(()=>window.onresize(),0);

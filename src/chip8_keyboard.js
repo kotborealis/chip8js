@@ -35,5 +35,6 @@ function Chip8_keyboard(canvasManager,keyMap=_keyMap){
     this.onNext = (_callback)=>{
         callbackOnNext=true;
         callback=_callback;
-    }
+    };
+    this.clear = ()=>this.key = new Uint8Array(16);
 }
