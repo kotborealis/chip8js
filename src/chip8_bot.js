@@ -11,6 +11,15 @@ function Chip8_bot(cpu){
      * cpu.v[12] - Platform x position
      */
     roms.BRIX = function(){
+        const ball = {};
+        ball.x=0;
+        ball.y=0;
+        ball._x=0;
+        ball._y=0;
+        const platform = {};
+        platform.x = 0;
+        platform.center = 3;
+
         const press_left = ()=> {
             cpu.keyboard.key[4] = 1;
             cpu.keyboard.key[6] = 0;
@@ -24,15 +33,19 @@ function Chip8_bot(cpu){
             cpu.keyboard.key[4] = 0;
         };
         const cycle = ()=> {
-            const d = cpu.v[6] - cpu.v[12] - 3;
-            if (d > 1) {
-                if (cpu.v[12] + 6 < 64)
+            ball._x = ball.x;ball._y = ball.y;
+            ball.x = cpu.v[6]; ball.y = cpu.v[7];
+            platform.x = cpu.v[12];
+
+            const dx = ball.x - platform.x - platform.center;
+            if (dx > 1) {
+                if (platform.x + platform.center*2 < 64)
                     press_right();
                 else
                     release();
             }
-            else if (d < -1) {
-                if (cpu.v[12] > 0)
+            else if (dx < -1) {
+                if (platform.x > 0)
                     press_left();
                 else
                     release();
