@@ -30,9 +30,10 @@ function PixelRender(canvasManager,options={}){
 
     const renderPixels = ()=>{
         ctx.fillStyle="#fff";
+        let i;
         for(let y=0;y<options.height;y++)
             for(let x=0;x<options.width;x++){
-                const i = y*options.width+x;
+                i = y*options.width+x;
                 if(i>=this.pixels.length)return;
                 if(!this.pixels[i])continue;
                 ctx.fillRect(x, y, 1, 1);
@@ -40,18 +41,14 @@ function PixelRender(canvasManager,options={}){
     };
 
     this.setPixel = (x,y)=>{
-        if(x>options.width-1)
-            while(x>options.width-1)
-                x-=options.width;
-        if(x<0)
-            while(x<0)
-                x+=options.width;
-        if(y>options.height-1)
-            while(y>options.height-1)
-                y-=options.height;
-        if(y<0)
-            while(y<0)
-                y+=options.width;
+        while(x>options.width-1)
+            x-=options.width;
+        while(x<0)
+            x+=options.width;
+        while(y>options.height-1)
+            y-=options.height;
+        while(y<0)
+            y+=options.height;
         const index = x+y*options.width;
         this.pixels[index]=this.pixels[index]^1;
         return !this.pixels[index];
