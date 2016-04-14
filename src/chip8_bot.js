@@ -2,15 +2,15 @@
 
 function Chip8_bot(cpu){
     let bot_cycle_timeout;
-    let current_rom_name="";
-    const roms = {};
+    this.romName="BRIX";
+    this.roms = {};
     /**
      * BRIX Game bot
      * cpu.v[6] - Ball x position
      * cpu.v[7] - Ball y position
      * cpu.v[12] - Platform x position
      */
-    roms.BRIX = function(){
+    this.roms.BRIX = function(){
         const ball = {};
         ball.x=0;
         ball.y=0;
@@ -57,11 +57,11 @@ function Chip8_bot(cpu){
         cycle();
     };
 
-    this.play = rom_name=>{
-        if(roms.hasOwnProperty(rom_name)) {
+    this.play = (rom_name=this.romName)=>{
+        if(this.roms.hasOwnProperty(rom_name)) {
             this.stop();
-            current_rom_name=rom_name;
-            roms[rom_name]();
+            this.romName=rom_name;
+            this.roms[rom_name]();
         }
     };
 
