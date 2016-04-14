@@ -12,19 +12,24 @@ function Chip8(){
     this.paused=false;
     this.keyboard;//Keypad
     this.screen;//screen device
+    this.speaker;
 
     let _timeout;
 
 
-    this.next = ()=>{
+    const next = ()=>{
+        if(this.pc<this.memory.length)_timeout=setTimeout(next,0);
         if(!this.paused) {
             this.opcode = this.memory[this.pc] << 8 | this.memory[this.pc + 1];
             exec();
             if (this.delay_timer > 0)this.delay_timer--;
-            if (this.sound_timer > 0)this.sound_timer--;
+            if (this.sound_timer > 0){
+                this.sound_timer--;
+                if(this.sound_timer===0)
+                    this.speaker.stop();
+            }
             requestAnimationFrame(this.screen.render);
         }
-        if(this.pc<this.memory.length)_timeout=setTimeout(this.next,0);
     };
 
     const exec = ()=>{
@@ -290,6 +295,7 @@ function Chip8(){
                      */
                     case 0x0018:
                         this.sound_timer = this.v[x];
+                        if(this.sound_timer>0)this.speaker.play();
                         break;
                     /**
                      *  0xfx29
@@ -365,7 +371,11 @@ function Chip8(){
         this.reset();
         loadFonts();
         loadRom(rom);
-    }
+    };
+
+    this.togglePause = ()=>this.pause=!this.pause;
+
+    this.start = next;
 }
 
 const _fontSet = new Uint8Array([
