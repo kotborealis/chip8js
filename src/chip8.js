@@ -13,6 +13,8 @@ function Chip8(){
     this.keyboard;//Keypad
     this.screen;//screen device
 
+    let _timeout;
+
 
     this.next = ()=>{
         if(!this.paused) {
@@ -20,17 +22,17 @@ function Chip8(){
             exec();
             if (this.delay_timer > 0)this.delay_timer--;
             if (this.sound_timer > 0)this.sound_timer--;
-            this.screen.render();
+            requestAnimationFrame(this.screen.render);
         }
-        setTimeout(this.next,0);
+        if(this.pc<this.memory.length)_timeout=setTimeout(this.next,0);
     };
 
     const exec = ()=>{
         this.pc+=2;
-        console.log(this.opcode.toString(16));
         const x = (this.opcode & 0x0f00) >> 8;
         const y = (this.opcode & 0x00f0) >> 4;
 
+        if(this.opcode===0)return;
         switch(this.opcode & 0xf000){
             case 0x000:
                 switch(this.opcode){
@@ -336,6 +338,7 @@ function Chip8(){
     };
 
     this.reset = ()=>{
+        clearTimeout(_timeout);
         this.screen.clear();
         this.pc = 0x200;
         this.memory = new Uint8Array(4096);
