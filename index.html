@@ -14,6 +14,7 @@
     <script src="src/utils.js"></script>
     <script src="src/chip8.js"></script>
     <script src="src/chip8_keyboard.js"></script>
+    <script src="src/chip8_speaker.js"></script>
     <script src="src/cirno.js"></script>
     <script src="dat.gui.min.js"></script>
 </head>
@@ -22,12 +23,14 @@
 </body>
 <script>
     "use strict";
-    const canvasManager = new CanvasManager("canvas",{fullscreen:true,width:640,height:320});
+    const canvasManager = new CanvasManager("canvas",{fullscreen:false,width:640,height:320});
     const pixelRender = new PixelRender(canvasManager,{width:64,height:32});
     const cpu = new Chip8();
     const keyboard = new Chip8_keyboard(canvasManager);
+    const speaker = new Chip8_speaker();
     cpu.screen = pixelRender;
     cpu.keyboard = keyboard;
+    cpu.speaker = speaker;
 
     const cirno = new Cirno_BRIX(cpu);
 
@@ -36,7 +39,7 @@
     ui.start = ()=>{
         loadBinaryData("./roms/"+ui.rom,(buffer)=>{
             cpu.init(buffer);
-            cpu.next();
+            cpu.start();
         });
     }
     ui.reset = ()=>cpu.reset();
@@ -45,6 +48,7 @@
     const gui = new dat.GUI();
     gui.add(ui,"rom",["BADFOOD","15PUZZLE","BLINKY","BLITZ","BRIX","CONNECT4","GUESS","HIDDEN","INVADERS","KALEID","MAZE","MERLIN","MISSILE","PONG","PONG2","PUZZLE","SYZYGY","TANK","TETRIS","TICTAC","UFO","VBRIX","VERS","WIPEOFF"]);
     gui.add(ui,"start");
+    gui.add(cpu,"paused");
     gui.add(ui,"reset");
     gui.add(ui,"brix_bot");
 </script>
